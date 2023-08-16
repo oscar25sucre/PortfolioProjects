@@ -1,24 +1,30 @@
---Select *
---From [Covid Portfolio Project]..Deaths
---where continent is not null
---order by 3,4
+Select *
+From [Covid Portfolio Project]..Deaths
+where continent is not null
+order by 3,4
 
---Select *
---From [Covid Portfolio Project]..CovidVaccinations
+Select *
+From [Covid Portfolio Project]..CovidVaccinations
 
 
 -- Select the data that we are going to be using
 
---Select location,date,total_cases,new_cases,total_deaths,population
---From [Covid Portfolio Project]..Deaths
---order by 1,2
+Select location,date,total_cases,new_cases,total_deaths,population
+From [Covid Portfolio Project]..Deaths
+order by 1,2
 
 --Looking at Total Cases vs Total Deaths
 Select location,date,total_cases,total_deaths,(total_deaths/total_cases)*100 AS DeathRate
 From [Covid Portfolio Project]..Deaths
---Where location like '%states%'
 order by 1,2
 
+--In the United States
+Select location,date,total_cases,total_deaths,(total_deaths/total_cases)*100 AS DeathRate
+From [Covid Portfolio Project]..Deaths
+Where location like '%states%'
+order by 1,2
+
+--Continents Death Rate
 Select continent,date,total_cases,total_deaths,(total_deaths/total_cases)*100 AS DeathRate
 From [Covid Portfolio Project]..Deaths
 where continent is not null
@@ -34,19 +40,16 @@ order by 1,2
 Select location,Population,MAX(total_cases) AS HighInfectionCount,Max((total_cases/Population))*100 AS InfectedPercentage
 From [Covid Portfolio Project]..Deaths
 where continent is not null 
---AND location like '%states%'
 group by location,Population
 order by 4 desc
 
---Continent
-
+--Continent infection rate
 Select continent,
 MAX(total_cases) AS HighInfectionCount,Max((total_cases/Population))*100 AS InfectedPercentage
 From [Covid Portfolio Project]..Deaths
 where continent is not null
 group by continent
 order by 3 desc
-
 
 
  --Showing countries with the highest death count per population
@@ -58,15 +61,11 @@ order by 3 desc
 
 
 ----Showing Continents death count 
-
 Select continent, MAX(cast(Total_deaths as int)) as TotalDeathCount
 From [Covid Portfolio Project]..Deaths
---Where location like '%states%'
 Where continent is not null 
 Group by continent
 order by TotalDeathCount desc
-
--- Can do the drill down by going above and adding Continent Layer
 
 -- World Calculations/ Global Numbers
 Select date, SUM(new_cases)As TotalCases, SUM(new_deaths) As TotalDeaths,Sum(new_deaths)/Sum(new_cases)*100 As DeathPercentage
@@ -103,7 +102,7 @@ select *,(rolling_total_vaccinations/population)*100 as 'total_vac%'
 from PopvsVac
 
 
--- Temp Table
+-- Use Temp table to get total population percent vaccinated
 
 drop table if exists #PercentPopulationVaccinated
 Create Table #PercentPopulationVaccinated
